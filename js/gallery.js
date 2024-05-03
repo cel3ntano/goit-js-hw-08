@@ -1,3 +1,5 @@
+// import * as basicLightbox from "basiclightbox";
+
 const images = [
   {
     preview:
@@ -65,25 +67,31 @@ const images = [
 ];
 
 const gallery = document.querySelector(".gallery");
-function createMarkup(imagesArray) {
+function createGallery(imagesArray) {
   return imagesArray.map(
     (image) =>
       `<li class="gallery-item">
     <a class="gallery-link" href="${image.original}">
     <img
-      class="gallery-image"
-      src="${image.preview}"
-      data-source="${image.original}"
-      alt="${image.description}"
-    />
-  </a>
-</li>`
+    class="gallery-image"
+    src="${image.preview}"
+    data-source="${image.original}"
+    alt="${image.description}"/>
+    </a>
+    </li>`
   );
 }
-gallery.innerHTML = createMarkup(images);
+gallery.innerHTML = createGallery(images).join("");
 
 gallery.addEventListener("click", onGalleryClick);
 
 function onGalleryClick(event) {
   event.preventDefault();
+  if (event.target !== event.currentTarget) {
+    const instance = basicLightbox.create(`
+      <img src="${event.target.dataset.source}"
+      alt="${event.target.getAttribute("alt")}"      
+      width="1112" height="640"/>`);
+    instance.show();
+  }
 }
